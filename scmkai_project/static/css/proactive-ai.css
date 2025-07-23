@@ -1,0 +1,317 @@
+/* Proactive AI Mentor System Styles */
+
+.proactive-suggestion {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 9998;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease-in-out;
+}
+
+.proactive-suggestion.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.suggestion-content {
+    padding: 0;
+}
+
+.suggestion-header {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.btn-close-suggestion {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-close-suggestion:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.suggestion-body {
+    padding: 16px;
+}
+
+.suggestion-body p {
+    margin-bottom: 12px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.suggestion-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.suggestion-actions .btn {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Celebration Messages */
+.celebration-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+    text-align: center;
+    min-width: 300px;
+}
+
+.celebration-message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.celebration-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.celebration-content i {
+    font-size: 18px;
+    animation: sparkle 1s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+}
+
+/* Welcome Message Specific Styles */
+.proactive-suggestion[id*="welcome"] .suggestion-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+}
+
+.proactive-suggestion[id*="welcome"] .suggestion-body {
+    background: linear-gradient(135deg, #f8f9ff 0%, #e7f3ff 100%);
+}
+
+/* Coaching Message Styles */
+.proactive-suggestion[data-type="coaching"] .suggestion-header {
+    background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+}
+
+/* Learning Opportunity Styles */
+.proactive-suggestion[data-type="learning"] .suggestion-header {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .proactive-suggestion {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100%);
+    }
+    
+    .proactive-suggestion.show {
+        transform: translateY(0);
+    }
+    
+    .suggestion-actions {
+        flex-direction: column;
+    }
+    
+    .suggestion-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .celebration-message {
+        left: 10px;
+        right: 10px;
+        min-width: auto;
+        transform: translate(0, -50%) scale(0.8);
+    }
+    
+    .celebration-message.show {
+        transform: translate(0, -50%) scale(1);
+    }
+}
+
+/* Animation for suggestion appearance */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+.proactive-suggestion.entering {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.proactive-suggestion.leaving {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+/* Pulse effect for important suggestions */
+.proactive-suggestion.urgent {
+    animation: urgentPulse 2s ease-in-out infinite;
+}
+
+@keyframes urgentPulse {
+    0%, 100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
+    50% { box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4); }
+}
+
+/* Learning progress indicator in suggestions */
+.suggestion-progress {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #dee2e6;
+}
+
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dee2e6;
+}
+
+.progress-dot.completed {
+    background: #28a745;
+}
+
+.progress-dot.current {
+    background: #ffc107;
+    animation: currentDotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes currentDotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Suggestion types with different styles */
+.suggestion-type-welcome {
+    border-left: 4px solid #0d6efd;
+}
+
+.suggestion-type-coaching {
+    border-left: 4px solid #17a2b8;
+}
+
+.suggestion-type-learning {
+    border-left: 4px solid #ffc107;
+}
+
+.suggestion-type-achievement {
+    border-left: 4px solid #28a745;
+}
+
+/* Interactive elements */
+.suggestion-interactive {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.suggestion-interactive:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Accessibility improvements */
+.proactive-suggestion:focus-within {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+.btn-close-suggestion:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 1px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .proactive-suggestion {
+        background: #2d3748;
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
+    
+    .suggestion-body p {
+        color: #e2e8f0;
+    }
+    
+    .celebration-message {
+        background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
+}
+
+/* Print styles */
+@media print {
+    .proactive-suggestion,
+    .celebration-message {
+        display: none !important;
+    }
+}
+

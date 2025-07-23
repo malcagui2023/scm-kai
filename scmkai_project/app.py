@@ -11,31 +11,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Database Models
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    role = db.Column(db.String(50), nullable=False, default='user')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+# Database Models (only declare here, no import from models.py)
+# Optionally, you can move these to models.py to separate concerns.
 
-class Conversation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    session_id = db.Column(db.String(100), nullable=False)
-    message = db.Column(db.Text, nullable=False)
-    response = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+# ... (your models can stay in models.py or be declared here) ...
 
-class SupplyChainData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    metric_name = db.Column(db.String(100), nullable=False)
-    metric_value = db.Column(db.Float, nullable=False)
-    metric_unit = db.Column(db.String(50), nullable=True)
-    category = db.Column(db.String(50), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+# AI Response Engine (keep as is)
 
-# AI Response Engine
 class SCMKAIEngine:
     def __init__(self):
         self.responses = {
@@ -60,15 +42,13 @@ class SCMKAIEngine:
                 'response': 'Supply chain costs are {cost_trend} by {cost_change}% this quarter. Main cost drivers: transportation (+12%), warehousing (+5%), inventory carrying costs (+8%). Optimization opportunities identified in route planning and inventory turnover.'
             }
         }
-
+    
     def get_response(self, message):
         message_lower = message.lower()
-
-        # Simple keyword matching for demo
+        
         for category, data in self.responses.items():
             for keyword in data['keywords']:
                 if keyword in message_lower:
-                    # Simulate dynamic data
                     response = data['response'].format(
                         fill_rate=92.5,
                         inventory_value=2.3,
@@ -80,21 +60,19 @@ class SCMKAIEngine:
                         cost_change=7
                     )
                     return response
-
-        # Default response
+        
         return "I understand you're asking about supply chain operations. Could you be more specific about what metrics or areas you'd like me to analyze? I can help with inventory levels, demand forecasting, supplier performance, fill rates, and cost analysis."
 
-# Initialize AI Engine
 ai_engine = SCMKAIEngine()
 
 # Routes
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/dashboard')
 def dashboard():
-    # Sample dashboard data
     dashboard_data = {
         'kpis': {
             'fill_rate': 92.5,
@@ -119,34 +97,25 @@ def api_chat():
     try:
         data = request.get_json()
         message = data.get('message', '')
-
+        
         if not message:
             return jsonify({'error': 'No message provided'}), 400
-
-        # Get AI response
+        
         response = ai_engine.get_response(message)
-
-        # Save conversation
+        
         session_id = session.get('session_id', 'anonymous')
-        conversation = Conversation(
-            session_id=session_id,
-            message=message,
-            response=response
-        )
-        db.session.add(conversation)
-        db.session.commit()
-
+        # You can save conversation to DB here if models are in this file or imported properly
+        
         return jsonify({
             'response': response,
             'timestamp': datetime.utcnow().isoformat()
         })
-
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/dashboard-data')
 def api_dashboard_data():
-    # Sample data for dashboard
     data = {
         'inventory_levels': [
             {'category': 'Category A', 'current': 85, 'target': 70},
@@ -175,23 +144,5 @@ def analytics():
 def settings():
     return render_template('settings.html')
 
-# Initialize database
-#@app.before_first_request
-#def create_tables():
-    db.create_all()
-
-    # Add sample data if tables are empty
-    #if SupplyChainData.query.count() == 0:
-    #   sample_data = [
-    #        SupplyChainData(metric_name='Fill Rate', metric_value=92.5, metric_unit='%', category='performance'),
-    #        SupplyChainData(metric_name='Inventory Value', metric_value=2.3, metric_unit='M USD', category='inventory'),
-    #        SupplyChainData(metric_name='Supplier Performance', metric_value=94.2, metric_unit='%', category='supplier'),
-    #        SupplyChainData(metric_name='Cost Variance', metric_value=-7.3, metric_unit='%', category='cost')
-    #    ]
-    #    for data in sample_data:
-    #        db.session.add(data)
-    #    db.session.commit()
-
 if __name__ == '__main__':
     app.run(debug=True)
-
