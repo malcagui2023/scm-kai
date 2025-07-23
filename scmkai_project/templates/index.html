@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="hero-section bg-primary text-white rounded p-5 mb-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">SCM-KAI AI Companion</h1>
+                    <p class="lead mb-4">Your intelligent supply chain operations partner. Ask questions, get insights, make better decisions.</p>
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('chat') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-comments me-2"></i>Start Chatting
+                        </a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-chart-dashboard me-2"></i>View Dashboard
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-robot" style="font-size: 8rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-brain text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">Natural Language Processing</h5>
+                <p class="card-text">Ask questions in plain English and get intelligent responses about your supply chain operations.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line text-success mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">Real-time Analytics</h5>
+                <p class="card-text">Monitor KPIs, inventory levels, and supplier performance with live data visualization.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-bell text-warning mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title">Intelligent Alerts</h5>
+                <p class="card-text">Get proactive notifications about stock levels, supplier issues, and performance anomalies.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Quick Insights</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="quickChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Key Metrics</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Fill Rate:</strong> <span class="text-success">92.5%</span></li>
+                            <li><strong>Inventory Value:</strong> <span class="text-info">$2.3M</span></li>
+                            <li><strong>Supplier Performance:</strong> <span class="text-primary">94.2%</span></li>
+                            <li><strong>Order Accuracy:</strong> <span class="text-success">98.7%</span></li>
+                        </ul>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-sm">View Full Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Recent Alerts</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning alert-sm">
+                    <strong>Low Stock:</strong> SKU-B205 below minimum
+                </div>
+                <div class="alert alert-danger alert-sm">
+                    <strong>Critical:</strong> SKU-C108 critically low
+                </div>
+                <div class="alert alert-info alert-sm">
+                    <strong>Delay:</strong> Supplier ABC 2-day delay
+                </div>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-sm">View All Alerts</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Try These Questions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Inventory Questions</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"What's my current fill rate?"</a></li>
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"Which items are low on stock?"</a></li>
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"Show me inventory by category"</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Performance Questions</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"How are my suppliers performing?"</a></li>
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"What's driving cost increases?"</a></li>
+                            <li><a href="{{ url_for('chat') }}" class="text-decoration-none">"Show me demand forecast accuracy"</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Quick chart for homepage
+const ctx = document.getElementById('quickChart').getContext('2d');
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['On Target', 'Below Target', 'Above Target'],
+        datasets: [{
+            data: [70, 20, 10],
+            backgroundColor: ['#28a745', '#ffc107', '#17a2b8']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'KPI Performance'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
+

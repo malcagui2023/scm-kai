@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# PythonAnywhere instance files (optional)
+instance/
+
+# SQLite database files
+*.db
+
+# Logs and local config
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# IDE/editor config files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Static files cache
+staticfiles/

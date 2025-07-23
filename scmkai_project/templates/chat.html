@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}AI Chat - SCM-KAI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-robot me-2"></i>SCM-KAI Assistant</h5>
+                <div>
+                    <button class="btn btn-outline-secondary btn-sm" id="clearChat">
+                        <i class="fas fa-trash me-1"></i>Clear Chat
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" id="scheduleTraining">
+                        <i class="fas fa-calendar me-1"></i>Schedule Training
+                    </button>
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column" style="height: 600px;">
+                <div id="chatMessages" class="flex-grow-1 overflow-auto mb-3 p-3 bg-light rounded">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <strong>SCM-KAI:</strong> Hello! I'm your AI supply chain companion. I can help you with inventory analysis, supplier performance, demand forecasting, and more. What would you like to know?
+                        </div>
+                        <small class="text-muted">Just now</small>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="messageInput" class="form-control" placeholder="Ask me about your supply chain operations..." autocomplete="off">
+                    <button class="btn btn-primary" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="What's my current fill rate?">
+                        Fill Rate Status
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="Show me low stock items">
+                        Low Stock Alert
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="How are suppliers performing?">
+                        Supplier Performance
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="What's driving cost increases?">
+                        Cost Analysis
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="Show demand forecast">
+                        Demand Forecast
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-check text-success me-2"></i>Ask specific questions about metrics</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Request data by category or time period</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Ask for recommendations and insights</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Use natural language - no special syntax needed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+class ChatInterface {
+    constructor() {
+        this.messageInput = document.getElementById('messageInput');
+        this.sendButton = document.getElementById('sendMessage');
+        this.chatMessages = document.getElementById('chatMessages');
+        this.clearButton = document.getElementById('clearChat');
+        this.scheduleButton = document.getElementById('scheduleTraining');
+        
+        this.initializeEventListeners();
+    }
+    
+    initializeEventListeners() {
+        this.sendButton.addEventListener('click', () => this.sendMessage());
+        this.messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMessage();
+        });
+        
+        this.clearButton.addEventListener('click', () => this.clearChat());
+        this.scheduleButton.addEventListener('click', () => this.scheduleTraining());
+        
+        // Quick question buttons
+        document.querySelectorAll('.quick-question').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const question = e.target.getAttribute('data-question');
+                this.messageInput.value = question;
+                this.sendMessage();
+            });
+        });
+    }
+    
+    async sendMessage() {
+        const message = this.messageInput.value.trim();
+        if (!message) return;
+        
+        // Add user message to chat
+        this.addMessage(message, 'user');
+        this.messageInput.value = '';
+        
+        // Show typing indicator
+        this.showTypingIndicator();
+        
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            const data = await response.json();
+            
+            // Remove typing indicator
+            this.removeTypingIndicator();
+            
+            if (response.ok) {
+                this.addMessage(data.response, 'ai');
+            } else {
+                this.addMessage('Sorry, I encountered an error. Please try again.', 'ai', 'error');
+            }
+        } catch (error) {
+            this.removeTypingIndicator();
+            this.addMessage('Sorry, I\'m having trouble connecting. Please check your connection and try again.', 'ai', 'error');
+        }
+    }
+    
+    addMessage(content, sender, type = 'normal') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        
+        const timestamp = new Date().toLocaleTimeString();
+        const senderName = sender === 'user' ? 'You' : 'SCM-KAI';
+        
+        messageDiv.innerHTML = `
+            <div class="message-content ${type === 'error' ? 'text-danger' : ''}">
+                <strong>${senderName}:</strong> ${content}
+            </div>
+            <small class="text-muted">${timestamp}</small>
+        `;
+        
+        this.chatMessages.appendChild(messageDiv);
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+    }
+    
+    showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typingIndicator';
+        typingDiv.className = 'message ai-message';
+        typingDiv.innerHTML = `
+            <div class="message-content">
+                <strong>SCM-KAI:</strong> <span class="typing-dots">Thinking<span>.</span><span>.</span><span>.</span></span>
+            </div>
+        `;
+        
+        this.chatMessages.appendChild(typingDiv);
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+    }
+    
+    removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+    
+    clearChat() {
+        this.chatMessages.innerHTML = `
+            <div class="message ai-message">
+                <div class="message-content">
+                    <strong>SCM-KAI:</strong> Hello! I'm your AI supply chain companion. I can help you with inventory analysis, supplier performance, demand forecasting, and more. What would you like to know?
+                </div>
+                <small class="text-muted">Just now</small>
+            </div>
+        `;
+    }
+    
+    scheduleTraining() {
+        alert('Training scheduling feature coming soon! This will allow you to schedule personalized SCM-KAI training sessions.');
+    }
+}
+
+// Initialize chat interface when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new ChatInterface();
+});
+</script>
+{% endblock %}
+

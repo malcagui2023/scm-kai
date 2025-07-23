@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SCM-KAI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-chart-dashboard me-2"></i>Supply Chain Dashboard</h2>
+        <p class="text-muted">Real-time insights into your supply chain operations</p>
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Fill Rate</h6>
+                        <h3 class="mb-0">{{ data.kpis.fill_rate }}%</h3>
+                        <small>Target: 95%</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chart-line fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Inventory Value</h6>
+                        <h3 class="mb-0">${{ data.kpis.inventory_value }}M</h3>
+                        <small>Total Assets</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-boxes fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Supplier Performance</h6>
+                        <h3 class="mb-0">{{ data.kpis.supplier_performance }}%</h3>
+                        <small>Average Score</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-truck fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Cost Variance</h6>
+                        <h3 class="mb-0">{{ data.kpis.cost_variance }}%</h3>
+                        <small>vs Budget</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-area me-2"></i>Inventory Levels by Category</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="inventoryChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Supplier Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="supplierChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alerts and Recent Activity -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Active Alerts</h5>
+                <span class="badge bg-danger">{{ data.alerts|length }}</span>
+            </div>
+            <div class="card-body">
+                {% for alert in data.alerts %}
+                <div class="alert alert-{{ 'danger' if alert.type == 'error' else alert.type }} alert-dismissible fade show">
+                    <strong>{{ alert.type|title }}:</strong> {{ alert.message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% if not data.alerts %}
+                <p class="text-muted mb-0">No active alerts. All systems operating normally.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-success"></div>
+                        <div class="timeline-content">
+                            <h6 class="mb-1">Inventory Updated</h6>
+                            <p class="mb-1 small">SKU-A401 stock level updated to 150 units</p>
+                            <small class="text-muted">2 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-warning"></div>
+                        <div class="timeline-content">
+                            <h6 class="mb-1">Low Stock Alert</h6>
+                            <p class="mb-1 small">SKU-B205 below minimum threshold</p>
+                            <small class="text-muted">15 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-info"></div>
+                        <div class="timeline-content">
+                            <h6 class="mb-1">Supplier Update</h6>
+                            <p class="mb-1 small">Regional Parts Ltd. delivery scheduled</p>
+                            <small class="text-muted">1 hour ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Inventory Levels Chart
+const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+new Chart(inventoryCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Category A', 'Category B', 'Category C', 'Category D'],
+        datasets: [{
+            label: 'Current Stock',
+            data: [85, 92, 45, 78],
+            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Target Level',
+            data: [70, 85, 60, 75],
+            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Stock Level (%)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: 'Current vs Target Stock Levels'
+            }
+        }
+    }
+});
+
+// Supplier Distribution Chart
+const supplierCtx = document.getElementById('supplierChart').getContext('2d');
+new Chart(supplierCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Global Supply Co.', 'Regional Parts Ltd.', 'Premium Components', 'Others'],
+        datasets: [{
+            data: [35, 25, 20, 20],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 205, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'Supplier Volume Distribution'
+            }
+        }
+    }
+});
+
+// Auto-refresh dashboard data every 30 seconds
+setInterval(async () => {
+    try {
+        const response = await fetch('/api/dashboard-data');
+        if (response.ok) {
+            const data = await response.json();
+            // Update charts with new data
+            console.log('Dashboard data refreshed');
+        }
+    } catch (error) {
+        console.error('Failed to refresh dashboard data:', error);
+    }
+}, 30000);
+</script>
+{% endblock %}
+

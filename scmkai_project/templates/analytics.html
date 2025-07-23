@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - SCM-KAI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-chart-bar me-2"></i>Supply Chain Analytics</h2>
+        <p class="text-muted">Advanced analytics and insights for your supply chain operations</p>
+    </div>
+</div>
+
+<!-- Analytics Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Time Period</label>
+                        <select class="form-select" id="timePeriod">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="365">Last year</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="category">
+                            <option value="all">All Categories</option>
+                            <option value="A">Category A</option>
+                            <option value="B">Category B</option>
+                            <option value="C">Category C</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Metric</label>
+                        <select class="form-select" id="metric">
+                            <option value="all">All Metrics</option>
+                            <option value="inventory">Inventory</option>
+                            <option value="performance">Performance</option>
+                            <option value="cost">Cost</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary" id="applyFilters">
+                            <i class="fas fa-filter me-2"></i>Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Performance Indicators -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Performance Trends</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="performanceTrendChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Demand Forecast vs Actual</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="demandForecastChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Analytics -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-warehouse me-2"></i>Inventory Analysis</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="inventoryAnalysisChart" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>Risk Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="risk-item mb-3 p-3 border-start-danger">
+                    <h6 class="text-danger mb-1">High Risk</h6>
+                    <p class="mb-1 small">SKU-C108: Critical stock level with 5-day lead time</p>
+                    <small class="text-muted">Impact: High | Probability: 85%</small>
+                </div>
+                <div class="risk-item mb-3 p-3 border-start-warning">
+                    <h6 class="text-warning mb-1">Medium Risk</h6>
+                    <p class="mb-1 small">Supplier ABC: Delivery delays increasing</p>
+                    <small class="text-muted">Impact: Medium | Probability: 60%</small>
+                </div>
+                <div class="risk-item mb-3 p-3 border-start-success">
+                    <h6 class="text-success mb-1">Low Risk</h6>
+                    <p class="mb-1 small">Category A: Stable performance</p>
+                    <small class="text-muted">Impact: Low | Probability: 20%</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Supplier Performance Matrix -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-truck me-2"></i>Supplier Performance Matrix</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>On-Time Delivery</th>
+                                <th>Quality Score</th>
+                                <th>Cost Performance</th>
+                                <th>Overall Rating</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Global Supply Co.</strong></td>
+                                <td><span class="badge bg-success">95%</span></td>
+                                <td><span class="badge bg-success">98%</span></td>
+                                <td><span class="badge bg-warning">85%</span></td>
+                                <td><span class="badge bg-success">A</span></td>
+                                <td><i class="fas fa-arrow-up text-success"></i></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Regional Parts Ltd.</strong></td>
+                                <td><span class="badge bg-warning">87%</span></td>
+                                <td><span class="badge bg-success">92%</span></td>
+                                <td><span class="badge bg-success">92%</span></td>
+                                <td><span class="badge bg-warning">B</span></td>
+                                <td><i class="fas fa-arrow-down text-danger"></i></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Premium Components</strong></td>
+                                <td><span class="badge bg-success">98%</span></td>
+                                <td><span class="badge bg-success">99%</span></td>
+                                <td><span class="badge bg-danger">78%</span></td>
+                                <td><span class="badge bg-success">A-</span></td>
+                                <td><i class="fas fa-minus text-secondary"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendations -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>AI Recommendations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="recommendation-card p-3 border rounded">
+                            <h6 class="text-primary"><i class="fas fa-box me-2"></i>Inventory Optimization</h6>
+                            <p class="small mb-2">Reduce Category A inventory by 15% to optimize carrying costs while maintaining service levels.</p>
+                            <span class="badge bg-success">Potential Savings: $45K</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="recommendation-card p-3 border rounded">
+                            <h6 class="text-warning"><i class="fas fa-truck me-2"></i>Supplier Diversification</h6>
+                            <p class="small mb-2">Add backup supplier for critical SKUs to reduce dependency risk on Regional Parts Ltd.</p>
+                            <span class="badge bg-warning">Risk Reduction: 35%</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="recommendation-card p-3 border rounded">
+                            <h6 class="text-info"><i class="fas fa-chart-line me-2"></i>Demand Planning</h6>
+                            <p class="small mb-2">Implement seasonal adjustment factors to improve forecast accuracy by 12%.</p>
+                            <span class="badge bg-info">Accuracy Gain: +12%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Performance Trend Chart
+const performanceCtx = document.getElementById('performanceTrendChart').getContext('2d');
+new Chart(performanceCtx, {
+    type: 'line',
+    data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+            label: 'Fill Rate',
+            data: [89, 91, 93, 92.5],
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }, {
+            label: 'Order Accuracy',
+            data: [96, 97, 98.5, 98.7],
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: false,
+                min: 85,
+                max: 100
+            }
+        }
+    }
+});
+
+// Demand Forecast Chart
+const demandCtx = document.getElementById('demandForecastChart').getContext('2d');
+new Chart(demandCtx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+            label: 'Forecasted',
+            data: [1200, 1300, 1250, 1400, 1350, 1450],
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+            tension: 0.1
+        }, {
+            label: 'Actual',
+            data: [1150, 1280, 1220, 1380, 1320, null],
+            borderColor: 'rgb(255, 205, 86)',
+            backgroundColor: 'rgba(255, 205, 86, 0.1)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+// Inventory Analysis Chart
+const inventoryCtx = document.getElementById('inventoryAnalysisChart').getContext('2d');
+new Chart(inventoryCtx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Category A',
+            data: [{x: 85, y: 25.50}, {x: 200, y: 45.00}],
+            backgroundColor: 'rgba(255, 99, 132, 0.8)'
+        }, {
+            label: 'Category B',
+            data: [{x: 75, y: 12.75}, {x: 150, y: 22.30}],
+            backgroundColor: 'rgba(54, 162, 235, 0.8)'
+        }, {
+            label: 'Category C',
+            data: [{x: 25, y: 8.25}, {x: 100, y: 15.60}],
+            backgroundColor: 'rgba(255, 205, 86, 0.8)'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Current Stock Level'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Unit Cost ($)'
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Stock Level vs Unit Cost Analysis'
+            }
+        }
+    }
+});
+
+// Filter functionality
+document.getElementById('applyFilters').addEventListener('click', function() {
+    const timePeriod = document.getElementById('timePeriod').value;
+    const category = document.getElementById('category').value;
+    const metric = document.getElementById('metric').value;
+    
+    // Show loading indicator
+    this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Applying...';
+    
+    // Simulate API call
+    setTimeout(() => {
+        this.innerHTML = '<i class="fas fa-filter me-2"></i>Apply Filters';
+        SCMKAIApp.showNotification('Filters applied successfully', 'success');
+    }, 1000);
+});
+</script>
+{% endblock %}
+

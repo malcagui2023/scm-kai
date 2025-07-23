@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - SCM-KAI{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-cog me-2"></i>Settings</h2>
+        <p class="text-muted">Configure your SCM-KAI AI Companion preferences</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <!-- Settings Navigation -->
+        <div class="card">
+            <div class="card-body">
+                <div class="nav flex-column nav-pills" id="settings-tabs" role="tablist">
+                    <button class="nav-link active" id="general-tab" data-bs-toggle="pill" data-bs-target="#general" type="button" role="tab">
+                        <i class="fas fa-user me-2"></i>General
+                    </button>
+                    <button class="nav-link" id="notifications-tab" data-bs-toggle="pill" data-bs-target="#notifications" type="button" role="tab">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                    </button>
+                    <button class="nav-link" id="ai-tab" data-bs-toggle="pill" data-bs-target="#ai" type="button" role="tab">
+                        <i class="fas fa-robot me-2"></i>AI Settings
+                    </button>
+                    <button class="nav-link" id="data-tab" data-bs-toggle="pill" data-bs-target="#data" type="button" role="tab">
+                        <i class="fas fa-database me-2"></i>Data Sources
+                    </button>
+                    <button class="nav-link" id="security-tab" data-bs-toggle="pill" data-bs-target="#security" type="button" role="tab">
+                        <i class="fas fa-shield-alt me-2"></i>Security
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-9">
+        <div class="tab-content" id="settings-content">
+            <!-- General Settings -->
+            <div class="tab-pane fade show active" id="general" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">General Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Display Name</label>
+                                    <input type="text" class="form-control" value="Supply Chain Manager" placeholder="Your display name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Role</label>
+                                    <select class="form-select">
+                                        <option>Supply Chain Manager</option>
+                                        <option>Inventory Planner</option>
+                                        <option>Procurement Specialist</option>
+                                        <option>Operations Analyst</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Time Zone</label>
+                                    <select class="form-select">
+                                        <option>UTC-5 (Eastern Time)</option>
+                                        <option>UTC-6 (Central Time)</option>
+                                        <option>UTC-7 (Mountain Time)</option>
+                                        <option>UTC-8 (Pacific Time)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Language</label>
+                                    <select class="form-select">
+                                        <option>English</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Dashboard Refresh Rate</label>
+                                <select class="form-select">
+                                    <option>Real-time</option>
+                                    <option>Every 5 minutes</option>
+                                    <option>Every 15 minutes</option>
+                                    <option>Every 30 minutes</option>
+                                    <option>Manual only</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notifications Settings -->
+            <div class="tab-pane fade" id="notifications" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Notification Preferences</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <h6 class="mb-3">Alert Types</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="stockAlerts" checked>
+                                <label class="form-check-label" for="stockAlerts">
+                                    Low Stock Alerts
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="supplierAlerts" checked>
+                                <label class="form-check-label" for="supplierAlerts">
+                                    Supplier Performance Alerts
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="demandAlerts">
+                                <label class="form-check-label" for="demandAlerts">
+                                    Demand Forecast Alerts
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="costAlerts" checked>
+                                <label class="form-check-label" for="costAlerts">
+                                    Cost Variance Alerts
+                                </label>
+                            </div>
+                            
+                            <h6 class="mb-3">Delivery Methods</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                <label class="form-check-label" for="emailNotifications">
+                                    Email Notifications
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="browserNotifications">
+                                <label class="form-check-label" for="browserNotifications">
+                                    Browser Notifications
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="smsNotifications">
+                                <label class="form-check-label" for="smsNotifications">
+                                    SMS Notifications (Premium)
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Preferences</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Settings -->
+            <div class="tab-pane fade" id="ai" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">AI Companion Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Response Style</label>
+                                <select class="form-select">
+                                    <option>Professional & Detailed</option>
+                                    <option>Concise & Direct</option>
+                                    <option>Conversational</option>
+                                    <option>Technical</option>
+                                </select>
+                                <div class="form-text">Choose how SCM-KAI should communicate with you</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Proactive Insights</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="proactiveInsights" checked>
+                                    <label class="form-check-label" for="proactiveInsights">
+                                        Enable proactive recommendations and insights
+                                    </label>
+                                </div>
+                                <div class="form-text">SCM-KAI will automatically suggest optimizations and flag issues</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Learning Mode</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="learningMode" checked>
+                                    <label class="form-check-label" for="learningMode">
+                                        Allow SCM-KAI to learn from my preferences
+                                    </label>
+                                </div>
+                                <div class="form-text">Improve responses based on your feedback and usage patterns</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Confidence Threshold</label>
+                                <input type="range" class="form-range" min="50" max="95" step="5" value="80" id="confidenceThreshold">
+                                <div class="d-flex justify-content-between">
+                                    <small>50% (More suggestions)</small>
+                                    <small id="confidenceValue">80%</small>
+                                    <small>95% (Fewer, high-confidence suggestions)</small>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Update AI Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Sources -->
+            <div class="tab-pane fade" id="data" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Data Source Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Configure your data sources to enhance SCM-KAI's insights and recommendations.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card border">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0"><i class="fas fa-database me-2"></i>ERP System</h6>
+                                            <span class="badge bg-success">Connected</span>
+                                        </div>
+                                        <p class="small text-muted mb-2">SAP ERP - Production Database</p>
+                                        <button class="btn btn-outline-primary btn-sm">Configure</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="card border">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0"><i class="fas fa-file-excel me-2"></i>Excel Files</h6>
+                                            <span class="badge bg-warning">Partial</span>
+                                        </div>
+                                        <p class="small text-muted mb-2">Weekly inventory reports</p>
+                                        <button class="btn btn-outline-primary btn-sm">Setup</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="card border">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0"><i class="fas fa-cloud me-2"></i>Cloud APIs</h6>
+                                            <span class="badge bg-secondary">Not Connected</span>
+                                        </div>
+                                        <p class="small text-muted mb-2">Third-party logistics APIs</p>
+                                        <button class="btn btn-outline-primary btn-sm">Connect</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="card border">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0"><i class="fas fa-chart-line me-2"></i>BI Tools</h6>
+                                            <span class="badge bg-success">Connected</span>
+                                        </div>
+                                        <p class="small text-muted mb-2">Power BI dashboards</p>
+                                        <button class="btn btn-outline-primary btn-sm">Manage</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <button class="btn btn-primary">Add New Data Source</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Settings -->
+            <div class="tab-pane fade" id="security" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Security & Privacy</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <h6 class="mb-3">Access Control</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Session Timeout</label>
+                                <select class="form-select">
+                                    <option>15 minutes</option>
+                                    <option>30 minutes</option>
+                                    <option>1 hour</option>
+                                    <option>4 hours</option>
+                                    <option>Never</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="twoFactor">
+                                <label class="form-check-label" for="twoFactor">
+                                    Enable Two-Factor Authentication
+                                </label>
+                            </div>
+                            
+                            <h6 class="mb-3">Data Privacy</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="dataRetention" checked>
+                                <label class="form-check-label" for="dataRetention">
+                                    Allow conversation history retention for AI improvement
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="analytics">
+                                <label class="form-check-label" for="analytics">
+                                    Share anonymous usage analytics
+                                </label>
+                            </div>
+                            
+                            <h6 class="mb-3">Data Export</h6>
+                            <p class="text-muted small mb-3">Export your data and conversation history</p>
+                            <button type="button" class="btn btn-outline-secondary me-2">Export Data</button>
+                            <button type="button" class="btn btn-outline-danger">Delete All Data</button>
+                            
+                            <hr>
+                            <button type="submit" class="btn btn-primary">Save Security Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Update confidence threshold display
+document.getElementById('confidenceThreshold').addEventListener('input', function() {
+    document.getElementById('confidenceValue').textContent = this.value + '%';
+});
+
+// Form submission handlers
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        SCMKAIApp.showNotification('Settings saved successfully!', 'success');
+    });
+});
+
+// Two-factor authentication setup
+document.getElementById('twoFactor').addEventListener('change', function() {
+    if (this.checked) {
+        SCMKAIApp.showNotification('Two-factor authentication setup will be available in the next update.', 'info');
+    }
+});
+</script>
+{% endblock %}
+
