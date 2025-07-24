@@ -1,21 +1,19 @@
 import sys
 import os
 
-# Add the current directory (scmkai_project) to sys.path
-project_home = os.path.abspath(os.path.dirname(__file__))
+# Ensure the project root is on PYTHONPATH
+project_home = os.path.dirname(__file__)
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
 
-# Set environment variable for production
-os.environ['FLASK_ENV'] = 'production'
+# Use production environment
+os.environ.setdefault('FLASK_ENV', 'production')
 
-# Import the Flask app as application (Gunicorn expects this)
-from app import app as application
-
-# Initialize database and sample data
+# Import your Flask app and database
+from app import app as application, db
 from models import init_sample_data, KPIMetric
-from app import db
 
+# Initialize database and seed sample data on first run
 with application.app_context():
     db.create_all()
     if KPIMetric.query.count() == 0:
